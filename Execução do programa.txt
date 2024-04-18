@@ -1,0 +1,34 @@
+Execução do programa:
+
+Quando o programa iniciar as estruturas dos atendentes e dos clientes estarão vazias e como estamos num ambiente de simulação que não vai ter muitos atendentes o mais sensato
+é começar o programa por perguntar ao utilizador do simulador quantos atendentes estão disponiveis para a simulaçao. Após receber o numero de atendentes, utilizar esse valor
+como parametro para a função que vai criar a fila. A cada nó criado devemos perguntar qual vai ser o tipo de atendente, tempo de atendimento atribuido deve ser 0 pois o atendente em causa não estará a atender ninguem quando o seu nó for criado sendo que os clientes ainda não foram importados , o seu idle time (tempo que o atendente está sem atender ninguem durante a simulação) deve ser definido como 0 para e o seu estado deve ser definido como 0 (Livre para atender).
+
+A meu ver o mais inteligente ao introduzir o tipo de atendente é exibir uma janela ao utilizador com as diversas opções de atendente, por exemplo:
+
+ _______________________________________a
+|                                       |  \\Algo assim é capaz de resultar
+| 0 - Geral                             |
+| 1 - Tipo A                            |
+| 2 - Tipo B                            |
+|_______________________________________|
+
+Tipo de atendente desejado : INPUT DO UTILIZADOR DO SIMULADOR
+
+
+Após a criação da fila dos atendentes temos de ler a ficha de clientes para podermos começar a simulação.
+Começamos por pedir o nome do documento da ficha dos clientes e se o ficheiro for lido com sucesso prosseguimos à criação dos nós à medida que o ficheiro é lido pelo programa.
+Porém se o ficheiro não for lido com sucesso deve ser comunicado ao utilizador e deve ser solicitado que introduza novamente o ficheiro da ficha dos clientes para este poder ser lido. Creio que seja melhor desta maneira pois sendo que é necessário que o programa tenha a estrutura dos clientes preenchida para poder começar a simulação parece imperativo que o ficheiro seja lido.
+
+Após ter os atendentes e os clientes mostramos um pequeno menu com duas opções
+
+1. Começar simulação.
+0. Sair.
+
+Ao começar a simulaçao vamos ter de fazer a ligação atendente/cliente , que deve ser feita com cuidado pois existem niveis de hierarquias.
+
+Basicamente temos de pegar num atendente da fila,que no inicio será apenas o primeiro da fila um a um, mas depois deverá ser o que está à mais tempo sem trabalhar , ver o seu tipo, e consoante o seu tipo verificar os clientes existentes. Quando percorremos os potenciais clientes atendidos temos de verificar alguns parametros que vão criar uma "hierarquia entre os clientes". No fim o cliente no topo da "hierarquia" vai ser o atendido. Inicialmente o cliente no topo da hierarquia é apenas um cliente que seja do mesmo tipo do atendente. Devemos anotar se esse cliente é prioritário e o tempo que ele está à espera e verificamos outros potenciais clientes que podem estar acima desse, hierarquicamente. Se ambos os clientes forem do mesmo tipo do atendente, nao prioritarios, e o tempo de espera do cliente potencial for superior ao que está no topo da hierarquia, então o cliente potencial passa a ser o topo da hierarquia || Se ambos os clientes forem do mesmo tipo do atendente e o cliente do topo da hierarquia for não prioritário e o potencial for prioritário, então o prioritário passa ao topo da hierarquia (independentemente dos tipos de espera) || Por ultimo, se ambos os clientes forem do mesmo tipo, prioritários, então devemos olhar ao que tem o tempo de espera mais elevado. 
+
+Após definirmos o cliente que vai ser atendido pelo atendente no fim das verificações anteriores devemos definir o estado do atendente e do cliente como 1 (Ocupados) utilizar a funçao srand para obter um numero aleatorio e fazer esse numero %11 para obter o tempo de espera entre 0 a 10 minutos.
+
+Utilizar funcao sleep(1) para simular a passagem de tempo e a cada utilizaçao da funçao atualizar o estado atual do sistema (numero de clientes na lista, numero de atendentes livres, dados dos clientes, atendentes em atendimento).

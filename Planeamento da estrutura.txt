@@ -1,0 +1,23 @@
+Cada funcionario terá:
+
+Especialidade
+Tempo de atendimento atribuido
+Idle time (tempo sem atender ninguem)
+Estado (0 Para livre, 1 para ocupado)
+NOTA:Funcionários estarão guardados numa fila
+
+
+
+
+
+
+Cada cliente terá:
+
+Nome
+Telefone
+Especialidade
+Prioridade (0 ou 1)
+Tempo de atendimento atribuido:
+Tempo de espera:
+Estado (0 ou 1)
+NOTA:Clientes estarão armazenados numa lista ligada.

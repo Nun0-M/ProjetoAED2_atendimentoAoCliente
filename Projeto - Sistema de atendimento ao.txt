@@ -1,0 +1,20 @@
+Projeto - Sistema de atendimento ao cliente 
+
+Objetivo: Simular o funcionamento de um sistema de atendimento ao cliente de uma empresa
+
+Requisitos
+
+- Ler arquivo de texto com os dados dos clientes que desejam ser atendidos com as seguintes informações - nome, telefone , especialidade,prioridade . Estas informações
+devem ser armazenadas numa lista ligada por ordem de chegada.
+
+- Os funcionários (atendentes) devem estar guardados numa fila e estes devem ter tres tipos :geral, especialidade 1 ou 2.
+
+Os clientes devem ser atendidos por ordem de prioridade, e depois por ordem de chegada. Cada cliente deve ser atendido por atendentes do mesmo tipo e se não houver
+atendente o cliente deve esperar na lista até que um fique livre .
+
+Se houver mais de um atendente do tipo adequado o programa deve escolher o que está há mais tempo sem atender.
+
+O intervalo de tempo dos tempos de atnedimento devem ser [0-10] minutos. //USAR SRAND PARA GERAR VALOR E UTILIZAR OPERAÇAO %11
+Utilizar funcao sleep(1) para simular a passagem de tempo e a cada utilizaçao da funçao atualizar o estado atual do sistema (numero de clientes na lista, numero de atendentes livres, dados dos clientes, atendentes em atendimento).
+
+O programa deve terminar quando todos os clientes forem atendidos. Prever maneira de abortar programa

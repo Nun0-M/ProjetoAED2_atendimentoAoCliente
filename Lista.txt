@@ -1,0 +1,30 @@
+Manuel Pereira;912345678;1;1
+Ana Silva;932456789;0;0
+Joao Santos;918765432;1;0
+Maria Fernandes;927654321;2;1
+Ines Oliveira;919876543;1;0
+Pedro Almeida;925678943;2;0
+Sofia Costa;936547812;0;1
+Miguel Rodrigues;917856432;1;1
+Catarina Sousa;934218765;2;0
+Diogo Martins;931987654;0;0
+Margarida Pereira; 912345678;1;1
+Tiago Oliveira; 932456789;2;0
+Carolina Santos; 918765432;0;1
+Francisco Silva; 927654321;1;0
+Beatriz Fernandes; 919876543;2;1
+Guilherme Almeida; 925678943;0;1
+Mariana Costa; 936547812;1;0
+Andre Rodrigues; 917856432;2;0
+Marta Sousa;934218765;0;1
+Luis Martins;931987654;1;0
+Rita Pereira;912345678;2;1
+Goncalo Oliveira;932456789;0;1
+Ana Santos;918765432;1;0
+Ricardo Fernandes;927654321;2;1
+Ines Almeida;919876543;0;0
+Hugo Rodrigues;925678943;1;0
+Filipa Costa;936547812;2;1
+Nuno Silva;917856432;0;1
+Sara Sousa;934218765;1;0
+Andre Martins;931987654;2;1

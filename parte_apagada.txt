@@ -1,0 +1,94 @@
+void atribuir_atendente(Clientes *cliente, Fila_atendentes *fila) {
+    Atendente *percorrer_fila = fila->inicio_fila;
+    Clientes *cliente_a_atender = NULL;
+    int max_tempo_espera = 0;
+
+    while (percorrer_fila != NULL) {
+        if (percorrer_fila->Ocupado == 0 && percorrer_fila->Especialidade == cliente->Especialidade) {
+            Clientes *temp = cliente;
+
+            while (temp != NULL) {
+                if (temp->Especialidade == percorrer_fila->Especialidade) {
+                    if (cliente_a_atender == NULL) {
+                        cliente_a_atender = temp;
+                        max_tempo_espera = temp->Tempo_espera;
+                    } else if (temp->Prioridade > cliente_a_atender->Prioridade || (temp->Prioridade == cliente_a_atender->Prioridade && temp->Tempo_espera > max_tempo_espera)) {
+                        cliente_a_atender = temp;
+                        max_tempo_espera = temp->Tempo_espera;
+                    }
+                }
+                temp = temp->proximo;
+            }
+
+            if (cliente_a_atender != NULL) {
+                printf("O cliente %s de tipo %d e prioridade %d sera atendido pelo atendente %d\n", cliente_a_atender->Nome, cliente_a_atender->Especialidade, cliente_a_atender->Prioridade,percorrer_fila->numero_Funcionario);
+                percorrer_fila->Ocupado = 1;
+                cliente_a_atender->Estado_atendimento = 1;
+                cliente_a_atender->Tempo_atendimento_atribuido = rand() % 10 + 1;
+                percorrer_fila->Tempo_atendimento_atribuido = cliente_a_atender->Tempo_atendimento_atribuido;
+            }
+        }
+        percorrer_fila = percorrer_fila->proximo_atendente;
+    }
+}
+
+void libertar_ligar(Clientes *cliente_atual, Clientes *cabecaLista, Fila_atendentes fila) {
+    Clientes *membro_aseguir_temp;
+    Clientes *temp;
+    temp = cabecaLista;
+    membro_aseguir_temp = cabecaLista;
+    while (membro_aseguir_temp != NULL) {
+        membro_aseguir_temp = membro_aseguir_temp->proximo;
+        if (membro_aseguir_temp == cliente_atual) {
+            break;
+        }
+        temp = temp->proximo;
+    }
+    membro_aseguir_temp = membro_aseguir_temp->proximo;
+    temp->proximo = membro_aseguir_temp;
+    free(cliente_atual);
+}
+
+
+
+void simulacao(Clientes **cliente, Fila_atendentes *fila){
+    int terminado;
+    int atendentes_parados;
+    int clientes_por_atender;
+    terminado = 0;
+    Atendente *percorrer_fila;
+    Clientes *temp;
+    temp = *cliente; //temp = cabeça da lista
+    percorrer_fila=fila->inicio_fila;
+     do{
+        while(percorrer_fila!=NULL){
+            if (percorrer_fila->Ocupado==0){
+                atendentes_parados++;
+                percorrer_fila->proximo_atendente;
+            }
+        }
+        atendentes_parados=0;
+        clientes_por_atender=0;
+        if(atendentes_parados>0){
+            atribuir_atendente(*cliente,fila);
+        }
+        while (temp!= NULL){
+            if (temp->Estado_atendimento == 0){
+                printf("O cliente %s esta em espera a %d minutos",temp->Nome,temp->Tempo_espera);
+            }
+            temp = temp->proximo;
+        }
+        sleep(1);
+        temp = *cliente;
+        if(temp->Estado_atendimento==1 && temp->Tempo_atendimento_atribuido>0){
+            temp->Tempo_atendimento_atribuido--;
+            if(temp->Tempo_atendimento_atribuido == 0){
+                
+            }
+        }
+
+        if(cliente == NULL){
+            terminado = 1;
+        }
+    }while(!terminado);
+}
