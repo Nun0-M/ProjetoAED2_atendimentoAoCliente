@@ -1,0 +1,7 @@
+Ines Almeida;919876543;0;0
+Hugo Rodrigues;925678943;1;0
+Filipa Costa;936547812;2;1
+Nuno Silva;917856432;0;1
+Sara Sousa;934218765;1;0
+Andre Martins;931987654;2;1
+Andre Rodrigues; 917856432;2;0
