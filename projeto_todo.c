@@ -4,19 +4,13 @@ void limparBuffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 }
-/*IMPLEMENTAÇAO DA lista dos clientes */
-Clientes *Criar_Node_Cliente(){
-    Clientes *novo_cliente;
-    novo_cliente = (Clientes*)malloc(sizeof(Clientes));
-
-}
 
 Clientes *criar_cliente() {
-    Clientes *novo_cliente = (Clientes*)malloc(sizeof(Clientes));
-    if (novo_cliente == NULL) {
-        printf("Erro: Falha ao alocar memória para novo cliente.\n");
-        exit(1);
-    }
+  Clientes *novo_cliente = (Clientes*)malloc(sizeof(Clientes));
+  if (novo_cliente == NULL) {
+    printf("Erro: Falha ao alocar memória para novo cliente.\n");
+    exit(1);
+  }
     return novo_cliente;
 }
 
@@ -34,22 +28,13 @@ Clientes* inserir_cliente(Clientes* cabecalista, Clientes* novo_cliente) {
     return cabecalista;
 }
 
-void liberar_lista(Clientes *cabecalista) {
-    Clientes *atual = cabecalista;
-    while (atual != NULL) {
-        Clientes *proximo = atual->proximo;
-        free(atual);
-        atual = proximo;
-    }
-}
-
 Clientes* Ler_Clientes() {
    char paragem;
     FILE *lista_clientes;
     char ficheiro[20];
     Clientes *cabecalista = NULL;
     printf("Introduza o nome do documento da lista dos clientes: ");
-    scanf("%s", ficheiro);
+    scanf("%19s", ficheiro);
 
     lista_clientes = fopen(ficheiro, "r");
 
@@ -78,73 +63,59 @@ Clientes* Ler_Clientes() {
 
 Clientes* organizarClientes(Clientes* cabecalista) {
     if (cabecalista == NULL || cabecalista->proximo == NULL) {
-        // Se a lista estiver vazia ou tiver apenas um elemento, retorna a lista original
         return cabecalista;
     }
-    Clientes *prioridade0_head = NULL;  // Cabeça da lista de prioridade 0
-    Clientes *prioridade1_head = NULL;  // Cabeça da lista de prioridade 1
+
+    Clientes *prioridade0_head = NULL;
+    Clientes *prioridade1_head = NULL;
     Clientes *temp = cabecalista;
     Clientes *proximo;
 
-    // Separando os clientes em duas listas baseado na prioridade
     while (temp != NULL) {
-        proximo = temp->proximo;  // Salva o próximo nó antes de modificar temp
-        
-        // Aloca um novo nó para inserir na lista de prioridade
-        Clientes *novo_cliente = malloc(sizeof(Clientes));
-        if (novo_cliente == NULL) {
-            // Tratamento de erro na alocação de memória
-            perror("Erro na alocação de memória");
-            exit(EXIT_FAILURE);
+        proximo = temp->proximo;
+
+        // Criar uma cópia do nó atual
+        Clientes *novoCliente = (Clientes *)malloc(sizeof(Clientes));
+        if (novoCliente == NULL) {
+            // Tratamento de erro de alocação de memória
+            // Aqui você pode inserir um código para lidar com o erro
+            return cabecalista;
         }
-        strcpy(novo_cliente->Nome, temp->Nome);
-        strcpy(novo_cliente->Numero, temp->Numero);
-        novo_cliente->Especialidade = temp->Especialidade;
-        novo_cliente->Prioridade = temp->Prioridade;
-        novo_cliente->proximo = NULL;
-        
-        // Insere o novo nó na lista apropriada (prioridade 0 ou 1)
+        *novoCliente = *temp;  // Copia os dados do cliente atual
+
         if (temp->Prioridade == 0) {
             // Insere na lista de prioridade 0
-            if (prioridade0_head == NULL) {
-                prioridade0_head = novo_cliente;
-            } else {
-                novo_cliente->proximo = prioridade0_head;
-                prioridade0_head = novo_cliente;
-            }
+            novoCliente->proximo = prioridade0_head;
+            prioridade0_head = novoCliente;
         } else if (temp->Prioridade == 1) {
             // Insere na lista de prioridade 1
-            if (prioridade1_head == NULL) {
-                prioridade1_head = novo_cliente;
-            } else {
-                novo_cliente->proximo = prioridade1_head;
-                prioridade1_head = novo_cliente;
-            }
+            novoCliente->proximo = prioridade1_head;
+            prioridade1_head = novoCliente;
         }
 
-        temp = proximo;  // Avança para o próximo nó na lista original
+        temp = proximo;
     }
-
+    temp = prioridade1_head;
+    printf("imprimir lista\n");
+    while(temp!=NULL){
+      printf("%s\n",temp->Nome);
+      temp=temp->proximo;
+    }
+    system("cls");
     // Concatenando a lista de prioridade 1 seguida pela lista de prioridade 0
     if (prioridade1_head == NULL) {
-        // Se não há clientes com prioridade 1, retorna apenas a lista de prioridade 0
         cabecalista = prioridade0_head;
     } else {
-        // Encontrando o último elemento da lista de prioridade 1
         Clientes *ultimoPrioridade1 = prioridade1_head;
         while (ultimoPrioridade1->proximo != NULL) {
             ultimoPrioridade1 = ultimoPrioridade1->proximo;
         }
-        // Conectando a lista de prioridade 1 com a lista de prioridade 0
         ultimoPrioridade1->proximo = prioridade0_head;
         cabecalista = prioridade1_head;
     }
-      free(temp);
-      free(prioridade0_head);
-      free(prioridade1_head);
+
     return cabecalista;
 }
-
 
 void mostrarListaClientes(Clientes* cabecalista){
   Clientes *temp = cabecalista;
@@ -193,62 +164,153 @@ void libertar_ligar(Clientes *cliente_atual, Clientes *cabecaLista, Fila_atenden
 }
 
   //esta funcao vai dar return á cabeça da lista dos atendentes ocupados
-Atendente* atribuirAtendentes(Fila_atendentes *fila, Clientes *cabecaLista, Atendente *listaAtendenteOcupado) {
-  int clienteEncontrado = 0; // boolean variable
-  Clientes *clienteTemp = cabecaLista;
-  Atendente *atendenteTemp;
-  Atendente *percorrerListaAtendentesOcupados;
-  do {
-    atendenteTemp = fila->inicio_fila;
-    while (!clienteEncontrado || clienteTemp->proximo == NULL) {
-      if (clienteTemp->Especialidade == atendenteTemp->Especialidade && clienteTemp->Estado_atendimento == 0) {
-        clienteEncontrado = 1;
-      }
-      if (clienteEncontrado) {
-        clienteTemp->atendente_atribuido = atendenteTemp->numero_Funcionario;
-        clienteTemp->Estado_atendimento = 1;
-        clienteTemp->Tempo_atendimento_atribuido = rand() % 10 + 1;
-        if (listaAtendenteOcupado != NULL) {
-          atendenteTemp->proximo_atendente = listaAtendenteOcupado;
+void atribuirAtendentes(Fila_atendentes *fila, Clientes *cabecaLista, Atendente *listaAtendenteOcupado) {
+    Atendente* atendenteTemp = fila->inicio_fila;
+    Atendente* nextAtendenteTemp; // Temporary pointer to store the next Atendente
+
+    while (atendenteTemp!= NULL) {
+        nextAtendenteTemp = atendenteTemp->proximo_atendente; // Store the next Atendente
+        Clientes* clienteTemp = cabecaLista;
+        while (clienteTemp!= NULL) {
+            if (clienteTemp->Especialidade == atendenteTemp->Especialidade && clienteTemp->Estado_atendimento == 0) {
+                clienteTemp->atendente_atribuido = atendenteTemp->numero_Funcionario;
+                clienteTemp->Estado_atendimento = 1;
+                clienteTemp->Tempo_atendimento_atribuido = rand() % 10 + 1; // Consider using a more robust timing mechanism
+                atendenteTemp->proximo_atendente = listaAtendenteOcupado;
+                listaAtendenteOcupado = atendenteTemp;
+                fila->inicio_fila = nextAtendenteTemp; // Update fila->inicio_fila only after processing the current Atendente
+                break;
+            }
+            clienteTemp = clienteTemp->proximo;
         }
-        listaAtendenteOcupado = atendenteTemp;
-        break;
-      }
-      clienteTemp = clienteTemp->proximo;
+        atendenteTemp = nextAtendenteTemp; // Move to the next Atendente
     }
-    fila->inicio_fila = fila->inicio_fila->proximo_atendente;
-    free(atendenteTemp);
-    clienteTemp = cabecaLista;
-  } while (atendenteTemp != fila->fim_fila);
-  printf("Did we actually get here?");
-  return listaAtendenteOcupado;
 }
 
 void mostrarListaClientesAtendidos(Clientes* cabecalista){
   Clientes *temp = cabecalista;
-  char prosseguir;
+  printf("__________________________________________\n");
   while (temp != NULL) {
     if(temp->Estado_atendimento==1){
     printf("Nome:%s, Telefone:%s, Especialidade:%d, Prioridade:%d\n", temp->Nome, temp->Numero, temp->Especialidade, temp->Prioridade);
     printf("Atendido pelo atendedor nr : %d \n",temp->atendente_atribuido);
+    printf("Tempo de atendimento restante:%d\n",temp->Tempo_atendimento_atribuido);
+    printf("_______________________________________\n");
      }
      temp = temp->proximo;
    }
   free(temp);
-  printf("Introduza um carater para prosseguir: ");
-  limparBuffer();
-  system("cls");
+}
+
+void mostrarListaClientesPorAtender(Clientes* cabecalista){
+  Clientes *temp = cabecalista;
+    printf("__________________________________________\n");
+  while (temp != NULL) {
+    if(temp->Estado_atendimento==0){
+    printf("Nome:%s, Telefone:%s, Especialidade:%d, Prioridade:%d\n", temp->Nome, temp->Numero, temp->Especialidade, temp->Prioridade);
+    printf("Tempo de espera: %d\n",temp->Tempo_espera);
+    printf("_______________________________________\n");
+     }
+     temp = temp->proximo;
+   }
+  free(temp);
+}
+
+void atualizarTempo(Clientes* cabecalista,Atendente* listaAtendentensOcupados){
+  Clientes *temp = cabecalista;
+  Atendente *atendenteOcupadoTemp;
+  atendenteOcupadoTemp = listaAtendentensOcupados;
+  while(temp != NULL){
+    if(temp->Estado_atendimento==1){
+      temp->Tempo_atendimento_atribuido--;
+    }else{
+      temp->Tempo_espera++;
+    }
+    temp=temp->proximo;
+  }
+  while (atendenteOcupadoTemp!=NULL){
+    atendenteOcupadoTemp->Tempo_atendimento_atribuido--;
+    atendenteOcupadoTemp = atendenteOcupadoTemp->proximo_atendente;
+  }
+  free(atendenteOcupadoTemp);
+  free(temp);
 }
 
 int isEmpty(Fila_atendentes fila){
 return(fila.inicio_fila==NULL);
 }
 
+int verificarChamadaTerminada(Atendente *listaAtendenteOcupado, Fila_atendentes *fila) {
+    int numero_atendentes_removidos = 0;
+    Atendente *temp = listaAtendenteOcupado;
+    Atendente *anterior = NULL;
+
+    while (temp != NULL) {
+        if (temp->Tempo_atendimento_atribuido == 0) {
+            // Atendente terminou o atendimento, remover da lista de atendentes ocupados
+            if (anterior == NULL) {
+                listaAtendenteOcupado = temp->proximo_atendente;
+            } else {
+                anterior->proximo_atendente = temp->proximo_atendente;
+            }
+
+            // Adicionar o atendente ao final da fila de atendentes livres
+            if (fila->inicio_fila == NULL) {
+                fila->inicio_fila = temp;
+            } else {
+                fila->fim_fila->proximo_atendente = temp;
+            }
+            fila->fim_fila = temp;
+            temp->proximo_atendente = NULL;
+
+            // Atualizar o ponteiro temp para o próximo atendente
+            Atendente *prox = temp->proximo_atendente;
+            free(temp);
+            temp = prox;
+
+            numero_atendentes_removidos++;
+        } else {
+            anterior = temp;
+            temp = temp->proximo_atendente;
+        }
+    }
+
+    return numero_atendentes_removidos;
+}
+
+
+void removerClientesTerminados(Clientes* cabecalista) {
+    Clientes *temp = cabecalista;
+    Clientes *anterior = NULL;
+
+    while (temp != NULL) {
+        if (temp->Estado_atendimento == 1 && temp->Tempo_atendimento_atribuido <= 0) {
+            // Remoção do nó que atende aos requisitos
+            if (anterior == NULL) {
+                cabecalista = temp->proximo;
+            } else {
+                anterior->proximo = temp->proximo;
+            }
+            // Libera a memória do nó removido
+            Clientes *prox = temp->proximo;
+            free(temp);
+            temp = prox;
+        } else {
+            anterior = temp;
+            temp = temp->proximo;
+        }
+    }
+}
+
+
 int main() {
+  int numero_atendentes_concluidos;
+	int i;
   srand(time(NULL));
   Clientes *inicio_Lista = NULL;
   Fila_atendentes filaAtendentesLivres;//Fila dos atendentes livres
   Atendente *listaAtendentesOcupados;//Cabeça da lista com os atendentes ocupados
+  listaAtendentesOcupados=NULL;
   int num_atendentes;
   int input_debug;
   char continuar;
@@ -261,7 +323,7 @@ int main() {
   printf("Digite o número de atendentes na fila: ");
   scanf("%d", &num_atendentes);
   inicializar_fila_atendentes(&filaAtendentesLivres);
-  for (int i = 0; i < num_atendentes; i++) {
+  for (i = 0; i < num_atendentes; i++) {
     Atendente *novo_atendente = (Atendente *)malloc(sizeof(Atendente));
     novo_atendente->numero_Funcionario = i+1;
     novo_atendente->Especialidade = rand() % 3;
@@ -273,6 +335,7 @@ int main() {
 // Impressão dos detalhes de cada atendente na fila
   Atendente *temp = filaAtendentesLivres.inicio_fila;
   while (temp != NULL) {
+    numero_atendentes_concluidos = 0;
     printf("Funcionario numero %d Especialidade %d\n", temp->numero_Funcionario, temp->Especialidade);
     temp = temp->proximo_atendente;
   }
@@ -284,18 +347,26 @@ int main() {
   printf("Introduza um carater para comecar a simulacao: ");
   scanf("%c",&continuar);
   limparBuffer();
+  system("cls");
     do{
       if(!isEmpty(filaAtendentesLivres)){  //Aqui determinamos que existem atendentesLivres, logo ativamos a funçao para atribuir atendentes
-        listaAtendentesOcupados = atribuirAtendentes(&filaAtendentesLivres,inicio_Lista,&listaAtendentesOcupados);
+      atribuirAtendentes(&filaAtendentesLivres,inicio_Lista,listaAtendentesOcupados);
       }
+      printf("Lista de clientes em atendimento\n");
       mostrarListaClientesAtendidos(inicio_Lista);
-
-
+      printf("\nLista de clientes por atender\n");
+      mostrarListaClientesPorAtender(inicio_Lista);
+      numero_atendentes_concluidos = 0;
+      sleep(10);
+      atualizarTempo(inicio_Lista,listaAtendentesOcupados);
+      numero_atendentes_concluidos = verificarChamadaTerminada(listaAtendentesOcupados,&filaAtendentesLivres);
+      if(numero_atendentes_concluidos>0){
+        removerClientesTerminados(inicio_Lista);
+      }
       if (inicio_Lista==NULL && listaAtendentesOcupados == NULL ){  //Condição de paragem da simulação
         simulacao_terminada = 1;
       }
     }while(!simulacao_terminada);
-
     return 0;
 }
 
