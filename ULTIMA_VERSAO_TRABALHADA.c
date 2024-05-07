@@ -5,11 +5,11 @@ void limparBuffer() {
     while ((c = getchar()) != '\n' && c != EOF);
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------
-//Funções para manipular a lista de clientes
+//FunÃ§Ãµes para manipular a lista de clientes
 Clientes *criar_cliente() {
   Clientes *novo_cliente = (Clientes*)malloc(sizeof(Clientes));
   if (novo_cliente == NULL) {
-    printf("Erro: Falha ao alocar memória para novo cliente.\n");
+    printf("Erro: Falha ao alocar memÃ³ria para novo cliente.\n");
     exit(1);
   }
     return novo_cliente;
@@ -31,7 +31,6 @@ Clientes* inserir_cliente(Clientes* cabecalista, Clientes* novo_cliente) {
 
 void mostrarListaClientes(Clientes* cabecalista){
   Clientes *temp = cabecalista;
-  char prosseguir;
   while (temp != NULL) {
     printf("\n|-----Cliente %s-----|\n", temp->Nome);
     printf("Telefone: %s \nEspecialidade: %d \nPrioridade: %d\n", temp->Numero, temp->Especialidade, temp->Prioridade);
@@ -44,7 +43,7 @@ void mostrarListaClientes(Clientes* cabecalista){
 }
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-//Funções para manipular a fila de atendentes
+//FunÃ§Ãµes para manipular a fila de atendentes
 
 void inicializar_fila_atendentes(Fila_atendentes *fila) {
   fila->inicio_fila = NULL; // Inicializa a fila como NULL
@@ -56,12 +55,12 @@ return(fila.inicio_fila==NULL);
 }
 
 void organizar_atendente(Fila_atendentes *fila, Atendente *atendente) {
-  atendente->proximo_atendente = NULL; // Garantir que o próximo do novo atendente seja NULL
+  atendente->proximo_atendente = NULL; // Garantir que o prÃ³ximo do novo atendente seja NULL
   if (fila->inicio_fila == NULL) { // Se a fila estiver vazia
     fila->inicio_fila = atendente;
     fila->fim_fila = atendente;
   } else {
-    fila->fim_fila->proximo_atendente = atendente; // Definir o próximo do último atendente como o novo atendente
+    fila->fim_fila->proximo_atendente = atendente; // Definir o prÃ³ximo do Ãºltimo atendente como o novo atendente
     fila->fim_fila = fila->fim_fila->proximo_atendente; // Atualizar o fim da fila para o novo atendente
   }
 }
@@ -69,7 +68,7 @@ void organizar_atendente(Fila_atendentes *fila, Atendente *atendente) {
 Atendente* criar_atendente() {
   Atendente *novo_atendente = (Atendente*)malloc(sizeof(Atendente));
   if (novo_atendente == NULL) {
-    printf("Erro: Falha ao alocar memória para novo atendente.\n");
+    printf("Erro: Falha ao alocar memÃ³ria para novo atendente.\n");
     exit(1);
   }
     return novo_atendente;
@@ -134,8 +133,8 @@ int verificarTiposAtendentes(Fila_atendentes *fila){
 }
 
 void enqueue2(Fila_atendentes *fila, Atendente *atendente){
-	//Esta fun��o  serve para criar o n� da fila do atendente que deve apontar para o proximo membro da fila, e n�o da lista
-	//Serve maioritariamente para apioar a fun�ao abaixo verificarChamadaTerminada que remove os atendentes que j� terminaram a chamada e adiciona-os a fila de atendentes disponiveis
+	//Esta funï¿½ï¿½o  serve para criar o nï¿½ da fila do atendente que deve apontar para o proximo membro da fila, e nï¿½o da lista
+	//Serve maioritariamente para apioar a funï¿½ao abaixo verificarChamadaTerminada que remove os atendentes que jï¿½ terminaram a chamada e adiciona-os a fila de atendentes disponiveis
 	Atendente* criarAtendenteDisponivel;
 	criarAtendenteDisponivel = (Atendente*)malloc(sizeof(Atendente));
 	criarAtendenteDisponivel->Especialidade = atendente->Especialidade;
@@ -154,7 +153,7 @@ void enqueue2(Fila_atendentes *fila, Atendente *atendente){
 }
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-//Funções para manipular a lista de atendentes ocupados
+//FunÃ§Ãµes para manipular a lista de atendentes ocupados
 
 Atendente* introduzir_no(Atendente* lista_atendentes_ocupados, Atendente* atendente_a_inserir) {
 	Atendente *copiaAtendente;
@@ -218,11 +217,11 @@ Clientes* organizarClientes(Clientes* cabecalista) {
     while (temp != NULL) {
         proximo = temp->proximo;
 
-        // Criar uma cópia do nó atual
+        // Criar uma cÃ³pia do nÃ³ atual
         Clientes *novoCliente = (Clientes *)malloc(sizeof(Clientes));
         if (novoCliente == NULL) {
-            // Tratamento de erro de alocação de memória
-            // Aqui você pode inserir um código para lidar com o erro
+            // Tratamento de erro de alocaÃ§Ã£o de memÃ³ria
+            // Aqui vocÃª pode inserir um cÃ³digo para lidar com o erro
             return cabecalista;
         }
         *novoCliente = *temp;  // Copia os dados do cliente atual
@@ -280,12 +279,12 @@ Atendente* atribuirAtendentes(Fila_atendentes *fila_atendentes_espera, Fila_aten
       clienteTemp = clienteTemp->proximo;
     }
     if(clienteTemp == NULL){
-    	printf("N�o foi encontrado cliente para o funcionario disponivel.\n");
-    	printf("A transferir o funcion�rio nr %d para a fila de atendentes em espera\n",atendenteTemp->numero_Funcionario);
+    	printf("Não foi encontrado cliente para o funcionario disponivel.\n");
+    	printf("A transferir o funcionário nr %d para a fila de atendentes em espera\n",atendenteTemp->numero_Funcionario);
     	//passar para a fila de atendentes livres
     	enqueue2(fila_atendentes_espera,atendenteTemp);
     	dequeue(fila);
-    	printf("Funcion�rio transferido com sucesso!\n");
+    	printf("Funcionário transferido com sucesso!\n");
     	if (fila->inicio_fila != NULL) { // Add null check before accessing inicio_fila
           atendenteTemp = fila->inicio_fila;
         } else {
@@ -294,7 +293,7 @@ Atendente* atribuirAtendentes(Fila_atendentes *fila_atendentes_espera, Fila_aten
 	}
   }
   free(atendenteTemp);
-  printf("Atribui�ao de atendentes terminada\n");
+  printf("Atribuiçao de atendentes terminada\n");
   return listaAtendenteOcupado;
 }
 
@@ -336,7 +335,7 @@ void mostrarListaAtendentesSemClientes(Fila_atendentes *fila_atendentes_sem_clie
 		printf("Lista de Atendentes sem Clientes para Atender\n");
 		printf("________________________________________________\n");
 		while (temp!=NULL){
-			printf("Funcion�rio nr: %d Especialidade : %d \nTempo sem Atender : %d \nTempo total de atendimento : %d\n",temp->numero_Funcionario,temp->Especialidade,temp->Tempo_sem_atender,temp->Tempo_atendimento_atribuido_total);
+			printf("Funcionário nr: %d Especialidade : %d \nTempo sem Atender : %d \nTempo total de atendimento : %d\n",temp->numero_Funcionario,temp->Especialidade,temp->Tempo_sem_atender,temp->Tempo_atendimento_atribuido_total);
 			printf("______________________________________________\n");
 			temp = temp->proximo_atendente;
 		}
@@ -386,7 +385,7 @@ int verificarChamadaTerminada(Atendente **listaAtendenteOcupado, Fila_atendentes
             }
             // Adicionar o atendente ao final da fila de atendentes livres
             enqueue2(fila,temp);
-            // Atualizar o ponteiro temp para o pr�ximo atendente
+            // Atualizar o ponteiro temp para o prï¿½ximo atendente
             Atendente *prox = temp->proximo_atendente;
             temp = prox;
             numero_atendentes_removidos++;
@@ -403,7 +402,7 @@ Clientes* removerClientesTerminados(Clientes* cabecalista) {
     Clientes *anterior = NULL;
     while (temp != NULL) {
         if (temp->Tempo_atendimento_atribuido == 0 && temp->Estado_atendimento==1) {
-            // Remo��o do n� que atende aos requisitos
+            // Remoï¿½ï¿½o do nï¿½ que atende aos requisitos
             if (anterior == NULL) {
                 cabecalista = temp->proximo;
             } else {
@@ -411,7 +410,7 @@ Clientes* removerClientesTerminados(Clientes* cabecalista) {
             }
             printf("Cliente %s atendido\n",temp->Nome);
             printf("A remover da lista\n");
-            // Liberta a mem�ria do n� removido
+            // Liberta a memï¿½ria do nï¿½ removido
             Clientes *prox = temp->proximo;
             free(temp);
             temp = prox;
@@ -436,7 +435,7 @@ int main() {
   Clientes *inicio_Lista = NULL;
   Fila_atendentes filaAtendentesLivres;//Fila dos atendentes livres
   Fila_atendentes filaAtendentesEmEspera;
-  Atendente *listaAtendentesOcupados;//Cabeça da lista com os atendentes ocupados
+  Atendente *listaAtendentesOcupados;//CabeÃ§a da lista com os atendentes ocupados
   listaAtendentesOcupados = (Atendente*)malloc(sizeof(Atendente));
   listaAtendentesOcupados=NULL;
   int num_atendentes;
@@ -482,7 +481,7 @@ int main() {
   	while(filaAtendentesLivres.inicio_fila !=NULL){
   		dequeue(&filaAtendentesLivres);
 	}
-	printf("Como n�o foi atribuido pelo menos um atendente de cada tipo ir� ter de repetir o processo de escolha de numero de atendentes.");
+	printf("Como não foi atribuido pelo menos um atendente de cada tipo irá ter de repetir o processo de escolha de numero de atendentes.");
 	sleep(5);
 	system("cls");
   }
@@ -515,15 +514,15 @@ int main() {
       if (inicio_Lista==NULL && listaAtendentesOcupados == NULL ){
     	system("cls");
     	printf("Todos os clientes foram atendidos!");
-    	printf("A simula��o durou um total de %d minutos.\n",tempo_total_sim);
+    	printf("A simulação durou um total de %d minutos.\n",tempo_total_sim);
     	mostrarListaAtendentesSemClientes(&filaAtendentesEmEspera);
-    	printf("A simula��o vai terminar em breve.\n");
+    	printf("A simulação vai terminar em breve.\n");
     	sleep(9);
         simulacao_terminada = 1;
       }
       system("cls");
     }while(!simulacao_terminada);
-    printf("Simula��o terminada com sucesso!\nA encerrar programa em : \n");
+    printf("Simulação terminada com sucesso!\nA encerrar programa em : \n");
     tempo_mostrado = 0;
     for(i=0;i<segundos_espera;i++){
     	tempo_mostrado = segundos_espera - i;
